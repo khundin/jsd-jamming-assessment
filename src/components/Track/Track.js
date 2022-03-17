@@ -2,7 +2,7 @@ import './Track.css';
 
 function Track(props) {
 
-  renderAction = () => {
+  const renderAction = () => {
     if (props.isRemoval) {
       return <button className='Track-action'>-</button>
     }
