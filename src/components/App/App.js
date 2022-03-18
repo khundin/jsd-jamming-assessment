@@ -1,10 +1,9 @@
 import './App.css';
-
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Spotify from '../../utils/Spotify';
 
 function App() {
@@ -39,14 +38,13 @@ function App() {
 
   const savePlaylist = () => {
     const trackURIs= playlistTracks.map(track => track.uri)
-    Spotify.savePlayList(playlistName, trackURIs).then(() => {
+    Spotify.savePlaylist(playlistName, trackURIs).then(() => {
       setPlaylistName("New Playlist");
       setPlaylistTracks([]);
     });
   }
 
   const search = (term) => {
-    console.log(term);
     Spotify.search(term).then((searchResult) => {
       setSearchResults(searchResult);
     });
