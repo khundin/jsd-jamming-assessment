@@ -4,39 +4,19 @@ import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Spotify from '../../utils/Spotify';
 
 function App() {
 
-  const [searchResults, setSearchResults] = useState(
-    [
-      {
-        name: 'name1',
-        artist: 'artist1',
-        album: 'album1',
-        id: 1
-      },
-      {
-        name: 'name2',
-        artist: 'artist2',
-        album: 'album2',
-        id: 2
-      },
-      {
-        name: 'name3',
-        artist: 'artist3',
-        album: 'album3',
-        id: 3
-      }
-    ]
-  );
+  const [searchResults, setSearchResults] = useState([]);
 
   const [playlistName, setPlaylistName] = useState("My Playlist");
-  const [playlistTracks, setPlaylistTracks] = useState([
-    {name: 'playlistname1', artist: 'playlistartist1', album: 'playlistalbum1', id: 4},
-    {name: 'playlistname2', artist: 'playlistartist2', album: 'playlistalbum2', id: 5},
-    {name: 'playlistname3', artist: 'playlistartist3', album: 'playlistalbum3', id: 6}
-  ]);
+  const [playlistTracks, setPlaylistTracks] = useState([]);
+
+  useEffect(() => {
+    Spotify.getAccessToken();
+  }, []);
 
   const addTrack = (track) => {
     
@@ -57,11 +37,26 @@ function App() {
       setPlaylistName(name);
   }
 
+  const savePlaylist = () => {
+    const trackURIs= playlistTracks.map(track => track.uri)
+    Spotify.savePlayList(playlistName, trackURIs).then(() => {
+      setPlaylistName("New Playlist");
+      setPlaylistTracks([]);
+    });
+  }
+
+  const search = (term) => {
+    console.log(term);
+    Spotify.search(term).then((searchResult) => {
+      setSearchResults(searchResult);
+    });
+  }
+
   return (
     <div>
       <h1>Ja<span class="highlight">mmm</span>ing</h1>
       <div class="App">
-        <SearchBar />
+        <SearchBar onSearch={search} />
         <div class="App-playlist">
           <SearchResults searchResults = {searchResults} 
                         onAdd={addTrack} />
@@ -69,7 +64,8 @@ function App() {
                     playlistName={playlistName} 
                     playlistTracks={playlistTracks}
                     onRemove={removeTrack}
-                    onNameChange={updatePlaylistName} />
+                    onNameChange={updatePlaylistName}
+                    onSave={savePlaylist} />
         </div>
       </div>
     </div>
