@@ -7,7 +7,7 @@ function Track(props) {
       return <button className='Track-action'>-</button>
     }
     else {
-      return <button className='Track-action'>+</button>
+      return <button onClick={props.onAdd} className='Track-action'>+</button>
     }
   }
 

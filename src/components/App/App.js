@@ -34,9 +34,19 @@ function App() {
   const [playlistName, setPlaylistName] = useState('playName');
   const [playlistTracks, setPlaylistTracks] = useState([
     {name: 'playlistname1', artist: 'playlistartist1', album: 'playlistalbum1', id: 4},
-    {name: 'playlistname1', artist: 'playlistartist1', album: 'playlistalbum1', id: 5},
-    {name: 'playlistname1', artist: 'playlistartist1', album: 'playlistalbum1', id: 6}
+    {name: 'playlistname2', artist: 'playlistartist2', album: 'playlistalbum2', id: 5},
+    {name: 'playlistname3', artist: 'playlistartist3', album: 'playlistalbum3', id: 6}
   ]);
+
+  const addTrack = (track) => {
+    
+    if (playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
+      return;
+    }
+    setPlaylistTracks([...playlistTracks,track])
+    alert('work!!!');
+    
+  }
 
   return (
     <div>
@@ -45,7 +55,7 @@ function App() {
         <SearchBar />
         <div class="App-playlist">
           <SearchResults searchResults = {searchResults} />
-          <Playlist playlistName={playlistName} playlistTracks={playlistTracks} />
+          <Playlist onAdd={addTrack} playlistName={playlistName} playlistTracks={playlistTracks} />
         </div>
       </div>
     </div>
